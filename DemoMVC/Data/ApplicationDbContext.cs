@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using DemoMVC.Data;
 using DemoMVC.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoMVC.Data
 {
@@ -10,7 +9,6 @@ namespace DemoMVC.Data
             : base(options)
         {
         }
-
         public DbSet<Student> Students { get; set; }
     }
 }
