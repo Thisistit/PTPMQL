@@ -1,0 +1,22 @@
+@model DemoMVC.Models.Entities.Student
+
+<h2>Thêm Student</h2>
+
+<form asp-action="Create">
+    <div>
+        Mã SV
+        <input asp-for="StudentCode" />
+        <span asp-validation-for="StudentCode"></span>
+    </div>
+    <div>
+        Name
+        <input asp-for="FullName" />
+        <span asp-validation-for="FullName"></span>
+    </div>
+    <button type="submit">Save</button>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

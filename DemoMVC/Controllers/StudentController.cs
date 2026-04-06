@@ -17,23 +17,60 @@ namespace DemoMVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Student std)
+    public async Task<IActionResult> Create(Student student)
+    {
+        if (ModelState.IsValid)
         {
-            _context.Students.Add(std);
+            _context.Add(student);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index");
         }
-        public async Task<IActionResult> Edit(string id)
+        return View(student);
+    }
+        [HttpPost]
+        public async Task<IActionResult> Edit(string StudentCode, Student student)
         {
-            var student = await _context.Students.FindAsync(id);
+            if (StudentCode != student.StudentCode)
+            {
+                return RedirectToAction("NotFoundPage");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+        return View(student);
+    }
+        public async Task<IActionResult> Delete(string studentCode)
+        {
+            var student = await _context.Students
+                .FirstOrDefaultAsync(m => m.StudentCode == studentCode);
+
+            if (student == null)
+                return RedirectToAction("NotFoundPage");
             return View(student);
         }
-        [HttpPost]
-        public async Task<IActionResult> Edit(Student std)
+        public IActionResult NotFoundPage()
         {
-            _context.Students.Update(std);
+            return View("NotFound");
+        }
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(string studentCode)
+        {
+            var student = await _context.Students
+                .FirstOrDefaultAsync(m => m.StudentCode == studentCode);
+
+            if (student == null)
+                return RedirectToAction("NotFoundPage");
+
+            _context.Students.Remove(student);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index");
         }
     }
 }

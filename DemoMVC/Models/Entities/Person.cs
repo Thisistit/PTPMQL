@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace DemoMVC.Models.Entities
 {
-    public class Student
+    public class Person
     {
         [Key]
         [Required(ErrorMessage = "Mã sinh viên không được để trống")]
