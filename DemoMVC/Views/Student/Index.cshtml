@@ -1,20 +1,45 @@
-@model IEnumerable<DemoMVC.Models.Entities.Student>
-<h2>Danh sach Sinh vien</h2>
-<table class="table table-bordered">
-    <tr>
-        <th>Ma SV</th>
-        <th>Ho Ten SV</th>
-        <th>Actions</th>
-    </tr>
-    @foreach (var item in Model)
-    {
+@model IEnumerable<DemoMVC.Models.ViewModels.StudentFaculty>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
         <tr>
-            <td>@item.StudentCode</td>
-            <td>@item.FullName</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.StudentCode" class="btn btn-warning">Edit</a>
-                <a asp-action="Delete" asp-route-id="@item.StudentCode" class="btn btn-danger">Delete</a>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacultyName)
+            </th>
+            <th>Action</th>
         </tr>
-    }
-</table>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FacultyName)
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StudentCode">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.StudentCode">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.StudentCode">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>

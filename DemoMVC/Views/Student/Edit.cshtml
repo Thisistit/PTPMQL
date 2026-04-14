@@ -1,22 +1,18 @@
 @model DemoMVC.Models.Entities.Student
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <h4>Student</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="StudentCode" class="control-label"></label>
-                <input asp-for="StudentCode" class="form-control" />
-                <span asp-validation-for="StudentCode" class="text-danger"></span>
-            </div>
+            <input type="text" asp-for="StudentCode" />
             <div class="form-group">
                 <label asp-for="FullName" class="control-label"></label>
                 <input asp-for="FullName" class="form-control" />
@@ -24,10 +20,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="FacultyId" class="control-label"></label>
-                <select asp-for="FacultyId" class ="form-control" asp-items="ViewBag.FacultyId"></select>
+                <select asp-for="FacultyId" class="form-control" asp-items="ViewBag.FacultyId"></select>
+                <span asp-validation-for="FacultyId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -38,5 +35,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

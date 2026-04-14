@@ -1,14 +1,17 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 namespace DemoMVC.Models.Entities
 {
     public class Student
     {
         [Key]
-        [Required(ErrorMessage = "Mã sinh viên không được để trống")]
+        [MinLength(6, ErrorMessage = "Ma sinh vien phai co it nhat 6 ky tu")]
         public string StudentCode { get; set; } = default!;
-        [Required(ErrorMessage = "Tên không được để trống")]
-        [StringLength(50, ErrorMessage = "Tên tối đa 50 ký tự")]
+        [Required(ErrorMessage = "Ho va ten khong duoc de trong")]
         public string FullName { get; set; } = default!;
+        public string FacultyId { get; set; } = default!;
+        [ForeignKey("FacultyId")]
+        public virtual Faculty? Faculty { get; set; } = default!;
     }
 }
