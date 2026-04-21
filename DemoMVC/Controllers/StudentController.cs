@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DemoMVC.Data;
 using DemoMVC.Models.Entities;
 using DemoMVC.Models.ViewModels;
+using OfficeOpenXml;
 
 namespace DemoMVC.Controllers
 {
@@ -59,9 +60,6 @@ namespace DemoMVC.Controllers
             return View();
         }
 
-        // POST: Student/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StudentCode,FullName,FacultyId")] Student student)
@@ -134,7 +132,7 @@ namespace DemoMVC.Controllers
             return View(student);
         }
 
-        // GET: Student/Delete/5
+        // GET: Student/Delete
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -151,8 +149,6 @@ namespace DemoMVC.Controllers
 
             return View(student);
         }
-
-        // POST: Student/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
@@ -171,5 +167,56 @@ namespace DemoMVC.Controllers
         {
             return _context.Students.Any(e => e.StudentCode == id);
         }
+        public IActionResult Import()
+        {
+            return View();
+        }
+        [HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Import(IFormFile file)
+{
+    if (file == null || file.Length == 0)
+        return Content("File không hợp lệ");
+
+    ExcelPackage.License.SetNonCommercialPersonal("Vuong");
+
+    using var stream = new MemoryStream();
+    await file.CopyToAsync(stream);
+
+    using var package = new ExcelPackage(stream);
+    var worksheet = package.Workbook.Worksheets[0];
+    int rowCount = worksheet.Dimension.Rows;
+
+    int success = 0;
+
+    for (int row = 2; row <= rowCount; row++)
+    {
+        var code = worksheet.Cells[row, 1].Text.Trim();
+        var name = worksheet.Cells[row, 2].Text.Trim();
+        var facultyId = worksheet.Cells[row, 3].Text.Trim();
+
+        if (string.IsNullOrEmpty(code)) continue;
+
+        if (_context.Students.Any(s => s.StudentCode == code))
+            continue;
+
+        var faculty = await _context.Faculties.FindAsync(facultyId);
+        if (faculty == null)
+            continue;
+
+        var student = new Student
+        {
+            StudentCode = code,
+            FullName = name,
+            FacultyId = facultyId
+        };
+
+        _context.Students.Add(student);
+        success++;
+    }
+    await _context.SaveChangesAsync();
+    TempData["Message"] = $"Import thành công {success} sinh viên!";
+    return RedirectToAction(nameof(Index));
+}
     }
 }

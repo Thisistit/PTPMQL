@@ -1,0 +1,19 @@
+@model DemoMVC.Models.Entities.Customer
+
+<h2>Sửa khách hàng</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="CustomerId" />
+
+    <div>
+        Tên:
+        <input asp-for="Name" />
+    </div>
+
+    <div>
+        Email:
+        <input asp-for="SDT" />
+    </div>
+
+    <button type="submit">Cập nhật</button>
+</form>

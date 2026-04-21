@@ -1,0 +1,25 @@
+@model List<DemoMVC.Models.Entities.Customer>
+
+<h2>Danh sách khách hàng</h2>
+
+<a href="/Customer/Create">Thêm mới</a>
+
+<table border="1">
+    <tr>
+        <th>Tên</th>
+        <th>Số điện thoại</th>
+        <th>Hành động</th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Name</td>
+        <td>@item.SDT</td>
+        <td>
+            <a href="/Customer/Edit/@item.CustomerId">Sửa</a> |
+            <a href="/Customer/Delete/@item.CustomerId">Xóa</a>
+        </td>
+    </tr>
+}
+</table>
